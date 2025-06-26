@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Customer {
+  id      String          @id @default(uuid())
+  name    String          @unique
+  status  Status          @default(NEW)
+  records ServiceRecord[]
+
+  @@map("customers")
+}
+
+model Service {
+  id      String          @id @default(uuid())
+  name    String          @unique
+  price   Int
+  records RecordService[]
+
+  @@map("services")
+}
+
+model ServiceRecord {
+  id         String          @id @default(uuid())
+  customer   Customer        @relation(fields: [customerId], references: [id])
+  customerId String
+  services   RecordService[]
+  totalPrice BigInt
+  createdAt  DateTime        @default(now())
+
+  @@map("service_records")
+}
+
+model RecordService {
+  id        String        @id @default(uuid())
+  record    ServiceRecord @relation(fields: [recordId], references: [id])
+  recordId  String
+  service   Service       @relation(fields: [serviceId], references: [id])
+  serviceId String
+
+  @@map("record_services")
+}
+
+enum Status {
+  NEW
+  OLD
+}

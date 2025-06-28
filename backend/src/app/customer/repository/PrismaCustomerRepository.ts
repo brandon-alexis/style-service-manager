@@ -4,7 +4,11 @@ import { Customer } from '../model/Customer'
 import { CustomerRepository } from './CustomerRepository'
 
 export class PrismaCustomerRepository implements CustomerRepository {
-  constructor(private readonly client: PrismaClient) {}
+  private readonly client: PrismaClient
+
+  constructor() {
+    this.client = new PrismaClient()
+  }
 
   async getAll(): Promise<Customer[]> {
     const customerList = await this.client.customer.findMany()
@@ -13,7 +17,7 @@ export class PrismaCustomerRepository implements CustomerRepository {
       (customer) => new Customer(customer.id, customer.name, customer.status),
     )
 
-    return Promise.resolve(customers)
+    return customers
   }
 
   async getById(id: string): Promise<Customer | null> {
@@ -26,12 +30,12 @@ export class PrismaCustomerRepository implements CustomerRepository {
     }
 
     const customer = new Customer(
-      foundCustomer?.id,
-      foundCustomer?.name,
-      foundCustomer?.status,
+      foundCustomer.id,
+      foundCustomer.name,
+      foundCustomer.status,
     )
 
-    return Promise.resolve(customer)
+    return customer
   }
 
   async create(customer: Customer): Promise<Customer> {

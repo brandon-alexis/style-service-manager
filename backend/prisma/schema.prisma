@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Customer {
-  id      String          @id @default(uuid())
+  id      String          @id
   name    String          @unique
   status  Status          @default(NEW)
   records ServiceRecord[]
@@ -23,7 +23,7 @@ model Customer {
 }
 
 model Service {
-  id      String          @id @default(uuid())
+  id      String          @id
   name    String          @unique
   price   Int
   records RecordService[]
@@ -32,7 +32,7 @@ model Service {
 }
 
 model ServiceRecord {
-  id         String          @id @default(uuid())
+  id         String          @id
   customer   Customer        @relation(fields: [customerId], references: [id])
   customerId String
   services   RecordService[]
@@ -43,7 +43,7 @@ model ServiceRecord {
 }
 
 model RecordService {
-  id        String        @id @default(uuid())
+  id        String        @id
   record    ServiceRecord @relation(fields: [recordId], references: [id])
   recordId  String
   service   Service       @relation(fields: [serviceId], references: [id])

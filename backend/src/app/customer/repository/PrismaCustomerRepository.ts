@@ -26,7 +26,7 @@ export class PrismaCustomerRepository implements CustomerRepository {
     })
 
     if (!foundCustomer) {
-      return Promise.resolve(null)
+      return null
     }
 
     const customer = new Customer(

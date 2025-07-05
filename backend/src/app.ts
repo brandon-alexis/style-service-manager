@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express'
 import logger from 'morgan'
 import cors from 'cors'
 import { customerRouter } from './app/customer/router/customerRouter'
+import { serviceRouter } from './app/service/router/serviceRouter'
 
 export const app = express()
 
@@ -16,3 +17,4 @@ app.get('/', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Welcome to the api style service manager' })
 })
 app.use('/api/customers', customerRouter)
+app.use('/api/services', serviceRouter)

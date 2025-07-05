@@ -38,6 +38,24 @@ export class PrismaCustomerRepository implements CustomerRepository {
     return customer
   }
 
+  async getByName(name: string): Promise<Customer | null> {
+    const foundCustomer = await this.client.customer.findFirst({
+      where: { name },
+    })
+
+    if (!foundCustomer) {
+      return null
+    }
+
+    const customer = new Customer(
+      foundCustomer.id,
+      foundCustomer.name,
+      foundCustomer.status,
+    )
+
+    return customer
+  }
+
   async create(customer: Customer): Promise<Customer> {
     const createdCustomer = await this.client.customer.create({
       data: {
@@ -60,7 +78,6 @@ export class PrismaCustomerRepository implements CustomerRepository {
     const updatedCustomer = await this.client.customer.update({
       where: { id },
       data: {
-        id: customer.getId(),
         name: customer.getName(),
         status: customer.getStatus(),
       },
